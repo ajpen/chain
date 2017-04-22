@@ -2,7 +2,7 @@ chain
 =====
 
 .. image:: https://img.shields.io/pypi/v/chain.svg
-    :target: https://pypi.python.org/pypi/chain
+    :target: https://pypi.python.org/ajpen/chain
     :alt: Latest PyPI version
 
 .. image:: https://travis-ci.org/borntyping/cookiecutter-pypackage-minimal.png
