@@ -4,6 +4,10 @@ __version__ = '0.1.0'
 __author__ = 'Anfernee Jervis <anferneejervis@gmail.com>'
 __all__ = []
 
+try:
+    from urllib import urlencode
+except ImportError:
+    from urllib.parse import urlencode
 
 try:
     import httplib
@@ -44,7 +48,9 @@ class Response(object):
      things like getting the headers, response status, body in json,
      raw body and the raw httplib response object
     """
-    pass
+    def __init__(self, raw_response, request=None):
+        self.raw_response = raw_response
+        self.request_sent = request
 
 
 class Client(object):
@@ -76,7 +82,7 @@ class Client(object):
         self.url = base_url
         self.cookies = cookies
         if use_default_headers:
-            header = self._default_headers
+            headers = self._default_headers
         self.headers = headers
         self.pre_request_callback = pre_request_callback
         self.default_method = default_method
@@ -117,6 +123,49 @@ class Client(object):
         """
         return dict(self.cookies)
 
-    # Sends a request to the endpoint using the default method
     def send_request(self, endpoint=None, query=None, body=None):
-        pass
+        """
+        Sends a request to the endpoint using the default method
+        :param endpoint: target endpoint e.g. '/toast'
+        :param query: arguments for the query string
+        :param body: the request body
+        :return: Response object
+        """
+        target_url = '{}{}'.format(self.url, endpoint)
+
+        request = self.prepare_request(
+            target_url,
+            method=self.default_method,
+            query=query,
+            body=body
+        )
+        return request.send()
+
+    def prepare_request(self, url, headers=None,
+                        method=None, query=None,body=None):
+        """
+
+        :return: request object 
+        """
+        self.run_pre_request()
+
+        if not method:
+            method = self.default_method
+        if not headers:
+            headers = self.prepare_request_headers()
+
+        return Request(url, method=method,
+                       headers=headers, query=query, body=body)
+
+    def run_pre_request(self):
+        if self.pre_request_callback:
+            self.pre_request_callback()
+
+    def prepare_request_headers(self):
+        headers = dict(self.headers).copy()
+        headers['Cookie'] = self.prepare_request_cookie()
+        return headers
+
+    def prepare_request_cookie(self):
+        cookie_list = ['{}={};'.format(k, v) for k, v in self.cookies.items()]
+        return ' '.join(cookie_list)
