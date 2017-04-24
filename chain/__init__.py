@@ -152,7 +152,6 @@ class Client(object):
             endpoint = ''
 
         request = self.prepare_request(
-            self.host,
             endpoint,
             method=self.default_method,
             query=query,
