@@ -70,7 +70,11 @@ class Response(object):
         self.request_sent = request
 
 
+# TODO: May need to move pre_request_callback up to the Request class,
+# so that it is called just before the request is sent
 class Client(object):
+
+    methods = ('GET', 'POST', 'PUT', 'DELETE')
 
     _default_headers = {'content-type': 'application/json'}
 
@@ -103,6 +107,19 @@ class Client(object):
         self.headers = headers
         self.pre_request_callback = pre_request_callback
         self.default_method = default_method
+
+    def __getattr__(self, name):
+        """
+        Where the magic happens! If the attribute requested is a method name
+        (get, post, etc), start the build with that particular method, else
+        do what you always do.
+        :param name:
+        :return: RequestBuilder or raises an AttributeError
+        """
+        method = name.upper()
+        if method in Client.methods:
+            return self._start_build(method)
+        raise AttributeError('type {} has no attribute {}'.format(type(self), name))
 
     def set_pre_request_callback(self, callback):
         """
@@ -160,7 +177,7 @@ class Client(object):
         return request.send()
 
     def prepare_request(self, url, headers=None,
-                        method=None, query=None,body=None):
+                        method=None, query=None, body=None):
         """
 
         :return: request object 
@@ -187,3 +204,8 @@ class Client(object):
     def prepare_request_cookie(self):
         cookie_list = ['{}={};'.format(k, v) for k, v in self.cookies.items()]
         return ' '.join(cookie_list)
+
+    def _start_build(self, method='GET'):
+        self.run_pre_request()
+        request_obj = self.prepare_request('', method=method)
+        return RequestBuilder('', request_obj)
