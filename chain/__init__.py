@@ -30,16 +30,33 @@ class RequestBuilder(object):
 
 
 class Request(object):
-    def __init__(self, url, method='GET', headers=None, query=None, body=None):
+    def __init__(self, host, url, method='GET', headers=None,
+                 query=None, body=None, timeout=None):
+        self.host = host
         self.url = url
         self.headers = headers
         self.query = query
         self.body = body
         self.method = method
         self.response = None
+        if timeout:
+            self.timeout = timeout
 
     def send(self):
-        pass
+        self.build_url()
+        connection = httplib.HTTPConnection(self.host)
+        response = connection.request(
+            self.method, self.url, self.body, self.headers
+        )
+
+        return self.build_response(response)
+
+    def build_url(self):
+        if self.query:
+            self.url = '{}?{}'.format(self.url, self.query)
+
+    def build_response(self, response):
+        return Response(response, self)
 
 
 class Response(object):
@@ -57,13 +74,13 @@ class Client(object):
 
     _default_headers = {'content-type': 'application/json'}
 
-    def __init__(self, base_url, headers=None, cookies=None,
+    def __init__(self, host, headers=None, cookies=None,
                  pre_request_callback=None, use_default_headers=False, default_method='GET'):
         """
         Client that provides an intuitive interface to building andconfiguring
         requests. 
-        :param base_url: url that resources belong to. 
-               e.g. 'http://someservice.com' 
+        :param host: the address (port included) of the API/resource. 
+               e.g. 'someservice.com' or 'localhost:80'
         :param headers: Any headers that will be passed to all requests unless
                explicitly changed with the 'set_headers' method
         :param cookies: Any cookies that will be passed to all requests unless
@@ -79,7 +96,7 @@ class Client(object):
                                send_request method is executed. Defaults to
                                'GET'
         """
-        self.url = base_url
+        self.host = host
         self.cookies = cookies
         if use_default_headers:
             headers = self._default_headers
@@ -91,7 +108,7 @@ class Client(object):
         """
         Set callback that is called before evey request.
         :param callback: called before each request. 
-                         Receives an instance of Client as the first parameter.
+                         Receives an instance of Client as the first parameter
                          to allow modification of headers, cookies, etc
         :return: None 
         """
@@ -107,7 +124,7 @@ class Client(object):
         self.default_method = method
 
     def change_base_url(self, url):
-        self.url = url
+        self.host = url
 
     def copy_headers(self):
         """
@@ -131,10 +148,12 @@ class Client(object):
         :param body: the request body
         :return: Response object
         """
-        target_url = '{}{}'.format(self.url, endpoint)
+        if not endpoint:
+            endpoint = ''
 
         request = self.prepare_request(
-            target_url,
+            self.host,
+            endpoint,
             method=self.default_method,
             query=query,
             body=body
@@ -154,7 +173,7 @@ class Client(object):
         if not headers:
             headers = self.prepare_request_headers()
 
-        return Request(url, method=method,
+        return Request(self.host, url, method=method,
                        headers=headers, query=query, body=body)
 
     def run_pre_request(self):
