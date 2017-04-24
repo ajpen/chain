@@ -53,7 +53,10 @@ class Request(object):
 
     def build_url(self):
         if self.query:
-            self.url = '{}?{}'.format(self.url, self.query)
+            self.url = '{}?{}'.format(self.url, self.build_query_string())
+
+    def build_query_string(self):
+        return urlencode(self.query)
 
     def build_response(self, response):
         return Response(response, self)
