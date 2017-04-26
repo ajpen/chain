@@ -54,7 +54,7 @@ Compatibility
 
 Licence
 -------
-MIT licensed. See full `Licence`_
+MIT licensed. See full `LICENSE`_
 
 Authors
 -------
