@@ -17,6 +17,7 @@ Lets take for example `this API:`_
 .. code-block:: pycon
 
     # create a new client for the API
+    >>> import chain
     >>> blogs = chain.Client('jsonplaceholder.typicode.com')
 
     # if you want the posts:
