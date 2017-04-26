@@ -56,9 +56,10 @@ class Request(object):
 
         self.build_url(query)
         connection = httplib.HTTPConnection(self.host)
-        response = connection.request(
+        connection.request(
             self.method, self.url, body, self.headers
         )
+        response = connection.getresponse()
 
         return self.build_response(response)
 
