@@ -61,6 +61,6 @@ Authors
 `chain` was written by `Anfernee Jervis <anferneejervis@gmail.com>`_.
 
 
-.. _`_this API:`: https://jsonplaceholder.typicode.com/
+.. _`this API:`: https://jsonplaceholder.typicode.com/
 .. _LICENSE: https://github.com/ajpen/chain/blob/master/LICENSE.md
 .. _`zmallen's pygraylog`: https://github.com/zmallen/pygraylog
