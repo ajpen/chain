@@ -26,37 +26,50 @@ class RequestBuilder(object):
         return RequestBuilder(url, self.___rqo___)
 
     def __call__(self, *args, **kwargs):
-        return self.___rqo___.send(self.___url___, *args, **kwargs)
+        return self.___rqo___.send_to_url(
+            self.___url___, *args, **kwargs)
 
 
 class Request(object):
-    def __init__(self, host, url, method='GET', headers=None,
-                 query=None, body=None, timeout=None):
+    def __init__(self, host, url, method='GET', headers=None, timeout=None):
         self.host = host
         self.url = url
         self.headers = headers
-        self.query = query
-        self.body = body
         self.method = method
         self.response = None
         if timeout:
             self.timeout = timeout
 
-    def send(self):
-        self.build_url()
+    def send_to_url(self, url, query=None, body=None):
+        if url is None:
+            url=''
+
+        self.url = url
+        return self.send(query, body)
+
+    def send(self, query=None, body=None):
+        if query is None:
+            query = dict()
+
+        if body is None:
+            body = ''
+
+        self.build_url(query)
         connection = httplib.HTTPConnection(self.host)
         response = connection.request(
-            self.method, self.url, self.body, self.headers
+            self.method, self.url, body, self.headers
         )
 
         return self.build_response(response)
 
-    def build_url(self):
-        if self.query:
-            self.url = '{}?{}'.format(self.url, self.build_query_string())
+    def build_url(self, query):
+        if query:
+            self.url = '{}?{}'.format(
+                self.url, self.build_query_string(query))
 
-    def build_query_string(self):
-        return urlencode(self.query)
+    @staticmethod
+    def build_query_string(query):
+        return urlencode(query)
 
     def build_response(self, response):
         return Response(response, self)
@@ -82,7 +95,8 @@ class Client(object):
     _default_headers = {'content-type': 'application/json'}
 
     def __init__(self, host, headers=None, cookies=None,
-                 pre_request_callback=None, use_default_headers=False, default_method='GET'):
+                 pre_request_callback=lambda: True,
+                 use_default_headers=True, default_method='GET'):
         """
         Client that provides an intuitive interface to building andconfiguring
         requests. 
@@ -104,8 +118,10 @@ class Client(object):
                                'GET'
         """
         self.host = host
+        if cookies is None:
+            cookies = {}
         self.cookies = cookies
-        if use_default_headers:
+        if use_default_headers or headers is None:
             headers = self._default_headers
         self.headers = headers
         self.pre_request_callback = pre_request_callback
@@ -171,16 +187,20 @@ class Client(object):
         if not endpoint:
             endpoint = ''
 
+        if not query:
+            query = {}
+
+        if not body:
+            body = {}
+
         request = self.prepare_request(
             endpoint,
-            method=self.default_method,
-            query=query,
-            body=body
+            method=self.default_method
         )
-        return request.send()
+        return request.send(query, body)
 
     def prepare_request(self, url, headers=None,
-                        method=None, query=None, body=None):
+                        method=None):
         """
 
         :return: request object 
@@ -193,14 +213,14 @@ class Client(object):
             headers = self.prepare_request_headers()
 
         return Request(self.host, url, method=method,
-                       headers=headers, query=query, body=body)
+                       headers=headers)
 
     def run_pre_request(self):
         if self.pre_request_callback:
             self.pre_request_callback()
 
     def prepare_request_headers(self):
-        headers = dict(self.headers).copy()
+        headers = dict(self.headers)
         headers['Cookie'] = self.prepare_request_cookie()
         return headers
 
