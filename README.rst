@@ -12,9 +12,10 @@ This project is very unstable and under active development.
 Usage
 -----
 
-Lets take for example `this API`_.
+Lets take for example `this API:`_
 
 .. code-block:: pycon
+
     # create a new client for the API
     >>> blogs = chain.Client('jsonplaceholder.typicode.com')
 
@@ -27,6 +28,7 @@ Lets take for example `this API`_.
 What about queries?
 
 .. code-block:: pycon
+
     >>> response = blogs.get.comments({'postId': '1'})
     >>> print response.raw_response.read()
 
@@ -34,6 +36,7 @@ What about queries?
 Installation
 ------------
 ::
+
     git clone https://github.com/ajpen/chain
 
 
@@ -58,6 +61,6 @@ Authors
 `chain` was written by `Anfernee Jervis <anferneejervis@gmail.com>`_.
 
 
-.. _`_this API`: https://jsonplaceholder.typicode.com/
+.. _`_this API:`: https://jsonplaceholder.typicode.com/
 .. _LICENSE: https://github.com/ajpen/chain/blob/master/LICENSE.md
 .. _`zmallen's pygraylog`: https://github.com/zmallen/pygraylog
