@@ -132,8 +132,18 @@ class Client(object):
 
         headers = self.prepare_request_headers()
 
-        return Request(self.host, method, url, headers,
-                       self.cookies)
+        return self.bake_request(host=self.host, method=method, url=url,
+                                 headers=headers, cookies=self.cookies)
+
+    @staticmethod
+    def bake_request(**kwargs):
+        """
+        Returns a Request instance prepared with **kwargs
+        Can be overridden to support another Request type
+        :param kwargs: Arguments for request object
+        :return: Request Instance
+        """
+        return Request(**kwargs)
 
     def run_pre_request(self):
         if self.pre_request_callback:
