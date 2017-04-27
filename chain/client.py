@@ -1,4 +1,8 @@
-from .http_objects import Request
+# if requests package available, import it, else use default httplib
+try:
+    from plugins import RequestsRequest as Request
+except:
+    from .http_objects import Request
 
 
 class RequestBuilder(object):
@@ -12,7 +16,7 @@ class RequestBuilder(object):
         return RequestBuilder(url, self.___rqo___)
 
     def __call__(self, *args, **kwargs):
-        return self.___rqo___.send_to_url(
+        return self.___rqo___.send(
             self.___url___, *args, **kwargs)
 
 

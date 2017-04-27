@@ -27,12 +27,12 @@ class Request(object):
         self.body = body
         self.query = query
 
-    def send_to_url(self, url, query=None, body=None):
+    def send(self, url, query=None, body=None, **kwargs):
         if url:
             self.url = url
-        return self.send(query, body)
+        return self._send(query, body)
 
-    def send(self, query=None, body=None):
+    def _send(self, query=None, body=None):
         if query is None:
             query = self.query
 
