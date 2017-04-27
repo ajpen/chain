@@ -25,7 +25,7 @@ class RequestsRequest(Request):
 
     def build_url(self, query):
         # support the requests.Request url
-        self.url = '{}{}'.format(self.host, self.url)
+        self.url = 'http://{}{}'.format(self.host, self.url)
 
         super(RequestsRequest, self).build_url(query)
 
