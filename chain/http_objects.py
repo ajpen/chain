@@ -10,37 +10,43 @@ except ImportError:
 
 
 class Request(object):
-    def __init__(self, host, url, method='GET', headers=None, timeout=None):
+    def __init__(self, host=None, method=None, url=None, headers=None,
+                 cookies=None, body=None, query=None, **kwargs):
+
+        headers = {} if headers is None else headers
+        cookies = {} if cookies is None else cookies
+        body = '' if body is None else body
+        query = {} if query is None else query
+        host = '' if host is None else host
+
         self.host = host
+        self.method = method
         self.url = url
         self.headers = headers
-        self.method = method
-        self.response = None
-        if timeout:
-            self.timeout = timeout
+        self.cookies = cookies
+        self.body = body
+        self.query = query
 
     def send_to_url(self, url, query=None, body=None):
-        if url is None:
-            url=''
-
-        self.url = url
+        if url:
+            self.url = url
         return self.send(query, body)
 
     def send(self, query=None, body=None):
         if query is None:
-            query = dict()
+            query = self.query
 
         if body is None:
-            body = ''
+            body = self.body
 
         self.build_url(query)
+
         connection = httplib.HTTPConnection(self.host)
         connection.request(
             self.method, self.url, body, self.headers
         )
-        response = connection.getresponse()
 
-        return self.build_response(response)
+        return self.build_response(connection.getresponse())
 
     def build_url(self, query):
         if query:
