@@ -2,7 +2,7 @@
 try:
     from plugins import RequestsRequest as Request
 except:
-    from .http_objects import Request
+    raise ImportError("requests package not found")
 
 
 class RequestBuilder(object):
