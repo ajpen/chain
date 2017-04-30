@@ -1,4 +1,3 @@
-# if requests package available, import it, else use default httplib
 try:
     from plugins import RequestsRequest as Request
 except:
@@ -20,37 +19,37 @@ class RequestBuilder(object):
             self.___url___, *args, **kwargs)
 
 
-# TODO: May need to move pre_request_callback up to the Request class,
-# so that it is called just before the request is sent
 class Client(object):
 
     methods = ('GET', 'POST', 'PUT', 'DELETE')
 
-    def __init__(self, host, headers=None, cookies=None,
-                 pre_request_callback=lambda: True,
-                 default_method='GET'):
+    def __init__(self, host, headers=None, cookies=None, auth=None):
         """
         Client that provides an intuitive interface to building and 
         configuring requests. 
         :param host: the address (port included) of the API/resource. 
                e.g. 'someservice.com' or 'localhost:80'
-        :param headers: Any headers that will be passed to all requests unless
-               explicitly changed with the 'set_headers' method
-        :param cookies: Any cookies that will be passed to all requests unless
+        
+        :param headers: Default headers that will be passed to all requests 
+               unless explicitly changed with the 'set_headers' method. Any headers
+               given as a parameter to the request, will be appended to the
+               default headers, creating the headers for that particular request.
+        
+        :param cookies: Default cookies that will be passed to all requests unless
                explicitly changed with the 'set_cookies' method. Cookies are
                automatically merged into headers before each request. Must be
-               dict with key value pairs.
-        :param pre_request_callback: executed before each request. Can be used
-               for changing headers, authentication, etc
-        :param default_method: sets the default method to use when the 
-                               send_request method is executed. Defaults to
-                               'GET'
+               dict with key value pairs. Any cookies given as a parameter to 
+               the request, will be appended to the default and used as the
+               cookies for that particular request.
+        
+        :param auth: requests-based Authentication object to use with each
+               request. Can be overridden by passing a new auth object
+               to the request
         """
         self.host = host
         self.cookies = {} if cookies is None else cookies
         self.headers = {} if headers is None else headers
-        self.pre_request_callback = pre_request_callback
-        self.default_method = default_method
+        self.auth = auth
 
     def __getattr__(self, name):
         """
@@ -65,24 +64,11 @@ class Client(object):
             return self._start_build(method)
         raise AttributeError('type {} has no attribute {}'.format(type(self), name))
 
-    def set_pre_request_callback(self, callback):
-        """
-        Set callback that is called before evey request.
-        :param callback: called before each request. 
-                         Receives an instance of Client as the first parameter
-                         to allow modification of headers, cookies, etc
-        :return: None 
-        """
-        self.pre_request_callback = callback
-
     def set_headers(self, headers):
         self.headers = headers
 
     def set_cookies(self, cookies):
         self.cookies = cookies
-
-    def set_default_method(self, method):
-        self.default_method = method
 
     def change_base_url(self, url):
         self.host = url
@@ -101,43 +87,16 @@ class Client(object):
         """
         return dict(self.cookies)
 
-    # def send_request(self, endpoint=None, query=None, body=None):
-    #     """
-    #     Sends a request to the endpoint using the default method
-    #     :param endpoint: target endpoint e.g. '/toast'
-    #     :param query: arguments for the query string
-    #     :param body: the request body
-    #     :return: Response object
-    #     """
-    #     if not endpoint:
-    #         endpoint = ''
-    #
-    #     if not query:
-    #         query = {}
-    #
-    #     if not body:
-    #         body = {}
-    #
-    #     request = self.prepare_request(
-    #         endpoint,
-    #         method=self.default_method
-    #     )
-    #     return request.send(query, body)
-
-    def prepare_request(self, url, method=None):
+    def prepare_request(self, url, method):
         """
 
         :return: request object 
         """
-        # self.run_pre_request()
-
-        if not method:
-            method = self.default_method
-
-        headers = self.prepare_request_headers()
-
-        return self.bake_request(host=self.host, method=method, url=url,
-                                 headers=headers, cookies=self.cookies)
+        return self.bake_request(
+            host=self.host, method=method, url=url,
+            headers=self.headers, cookies=self.cookies,
+            auth=self.auth
+        )
 
     @staticmethod
     def bake_request(**kwargs):
@@ -148,19 +107,6 @@ class Client(object):
         :return: Request Instance
         """
         return Request(**kwargs)
-
-    def run_pre_request(self):
-        if self.pre_request_callback:
-            self.pre_request_callback()
-
-    def prepare_request_headers(self):
-        headers = dict(self.headers)
-        headers['Cookie'] = self.prepare_request_cookie()
-        return headers
-
-    def prepare_request_cookie(self):
-        cookie_list = ['{}={};'.format(k, v) for k, v in self.cookies.items()]
-        return ' '.join(cookie_list)
 
     def _start_build(self, method='GET'):
         request_obj = self.prepare_request('', method=method)
