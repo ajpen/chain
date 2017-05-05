@@ -5,51 +5,60 @@ chain
     :target: https://pypi.python.org/ajpen/chain
     :alt: Latest PyPI version
 
-An expressive clean way to interact with RESTful APIs. It was inspired by `zmallen's pygraylog`_.
+An expressive clean way to interact with REsTful APIs. It was inspired by `zmallen's pygraylog`_.
 
-This project is very unstable and under active development.
+Chain is a small enhancement to the popular `requests`_ package. By referencing the endpoints as
+attributes to the client, it effectively "chains" the endpoints together, building the target url.
+
+Chain is an attempt to make REsTful API clients look more like python objects, by removing the
+hardcoded URL strings in the code.
+
+Chain uses the `requests`_ package as its http client, keeping its parameters and response objects.
+If you already use `requests`_ as your http client, then adopting chain would be easy.
 
 Usage
 -----
 
-Lets take for example `this API:`_
+Lets take for example `this API`_:
 
 .. code-block:: pycon
 
     # create a new client for the API
     >>> import chain
-    >>> blogs = chain.Client('jsonplaceholder.typicode.com')
+    >>> blogs = chain.Client('http://jsonplaceholder.typicode.com')
 
     # if you want the posts:
     >>> response = blogs.get.posts()
 
-    # the response object is raw now but will receive features later!
-    >>> print response.raw_response.read()
+    # the response is the response object from the requests package
+    >>> print response.json()
 
 What about queries?
 
 .. code-block:: pycon
 
-    >>> response = blogs.get.comments({'postId': '1'})
-    >>> print response.raw_response.read()
+    # parameters are the same as requests.requests parameters
+    >>> response = blogs.get.comments(params={'postId': '1'})
+    >>> print response.json ()
 
 
 Installation
 ------------
 ::
 
-    git clone https://github.com/ajpen/chain
+    pip install chain-api
 
 
 Requirements
 ^^^^^^^^^^^^
+::
 
-Nothing so far.
+    `requests`_
 
 Compatibility
 -------------
 
-(Barely!) Tested with 2.7
+Tested with Python 2.7
 
 
 Licence
@@ -62,6 +71,7 @@ Authors
 `chain` was written by `Anfernee Jervis <anferneejervis@gmail.com>`_.
 
 
-.. _`this API:`: https://jsonplaceholder.typicode.com/
+.. _this API: https://jsonplaceholder.typicode.com/
 .. _LICENSE: https://github.com/ajpen/chain/blob/master/LICENSE.md
 .. _`zmallen's pygraylog`: https://github.com/zmallen/pygraylog
+.. _requests: https://pypi.python.org/pypi/requests

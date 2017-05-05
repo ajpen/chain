@@ -1,8 +1,8 @@
 import setuptools
 
 setuptools.setup(
-    name="chain",
-    version="0.1.0",
+    name="chain-api",
+    version="0.1.2",
     url="https://github.com/ajpen/chain",
 
     author="Anfernee Jervis",
@@ -13,8 +13,9 @@ setuptools.setup(
 
     packages=setuptools.find_packages(),
 
-    install_requires=[],
-
+    install_requires=['requests'],
+    tests_require=['responses'],
+    test_suite='tests',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Programming Language :: Python',
