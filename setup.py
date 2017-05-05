@@ -1,7 +1,7 @@
 import setuptools
 
 setuptools.setup(
-    name="requests-chain",
+    name="chain-api",
     version="0.1.1",
     url="https://github.com/ajpen/chain",
 
@@ -14,6 +14,7 @@ setuptools.setup(
     packages=setuptools.find_packages(),
 
     install_requires=['requests'],
+    tests_require=['responses'],
 
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',

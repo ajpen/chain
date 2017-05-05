@@ -37,8 +37,7 @@ What about queries?
 
 .. code-block:: pycon
 
-    # parameters are the same as the `requests.request`_ parameters
-    # you do not have to pass url or method, as it is done automatically
+    # parameters are the same as requests.requests parameters
     >>> response = blogs.get.comments(params={'postId': '1'})
     >>> print response.json ()
 
@@ -47,7 +46,7 @@ Installation
 ------------
 ::
 
-    pip install requests-chain
+    pip install chain-api
 
 
 Requirements
@@ -76,4 +75,3 @@ Authors
 .. _LICENSE: https://github.com/ajpen/chain/blob/master/LICENSE.md
 .. _`zmallen's pygraylog`: https://github.com/zmallen/pygraylog
 .. _requests: https://pypi.python.org/pypi/requests
-.. _requests.request: http://docs.python-requests.org/en/master/api/#requests.request
