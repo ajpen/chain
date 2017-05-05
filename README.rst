@@ -49,16 +49,17 @@ Installation
     pip install chain-api
 
 
-Requirements
-^^^^^^^^^^^^
+Testing
+-------
 ::
 
-    `requests`_
+    python setup.py test
+
 
 Compatibility
 -------------
 
-Tested with Python 2.7
+Tested with Python 2.7, 3.5
 
 
 Licence
