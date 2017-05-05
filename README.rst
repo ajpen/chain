@@ -43,7 +43,7 @@ What about queries?
 
     # parameters are the same as requests.requests parameters
     >>> response = blogs.get.comments(params={'postId': '1'})
-    >>> print response.json ()
+    >>> print response.json()
 
 
 Installation
