@@ -15,7 +15,7 @@ setuptools.setup(
 
     install_requires=['requests'],
     tests_require=['responses'],
-
+    test_suite='tests',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Programming Language :: Python',
