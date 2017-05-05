@@ -1,4 +1,4 @@
-from client import Client
+from .client import Client
 
 """chain - An expressive clean way to interact with RESTful APIs."""
 
