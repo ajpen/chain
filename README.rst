@@ -2,7 +2,7 @@ chain
 =====
 
 .. image:: https://img.shields.io/pypi/v/chain.svg
-    :target: https://pypi.python.org/ajpen/chain-api
+    :target: https://pypi.python.org/pypi/chain-api/
     :alt: Latest PyPI version
 
 .. image:: https://travis-ci.org/ajpen/chain.svg?branch=master
