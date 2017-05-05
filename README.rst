@@ -68,7 +68,7 @@ Or:
 Compatibility
 -------------
 
-Tested with Python 2.7, 3.5
+Works with Python version 2.7, 3.3, 3.4, 3.5 and 3.6
 
 
 Licence
