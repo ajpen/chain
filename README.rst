@@ -55,6 +55,11 @@ Testing
 
     python setup.py test
 
+Or:
+::
+
+    tox
+
 
 Compatibility
 -------------
