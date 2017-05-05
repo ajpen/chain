@@ -89,7 +89,7 @@ class TestChainRequest(unittest.TestCase):
             response.status_code, 200, "Status does not match expected")
 
         self.assertEqual(
-            responses.calls[0].request.body,
+            responses.calls[0].request.body.decode('utf-8'),
             json.dumps({"want": "Chocolate-Chip"}),
             "Request body does not match expected"
         )
