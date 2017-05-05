@@ -48,5 +48,5 @@ class Client(object):
     def change_base_url(self, url):
         self.host = url
 
-    def _start_build(self, method='GET'):
+    def _start_build(self, method):
         return RequestBuilder(self.host, method)
