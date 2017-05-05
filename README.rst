@@ -2,8 +2,12 @@ chain
 =====
 
 .. image:: https://img.shields.io/pypi/v/chain.svg
-    :target: https://pypi.python.org/ajpen/chain
+    :target: https://pypi.python.org/ajpen/chain-api
     :alt: Latest PyPI version
+
+.. image:: https://travis-ci.org/ajpen/chain.svg?branch=master
+    :target: https://travis-ci.org/ajpen/chain
+    :alt: Latest Travis CI build status
 
 An expressive clean way to interact with REsTful APIs. It was inspired by `zmallen's pygraylog`_.
 
