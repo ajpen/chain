@@ -1,8 +1,8 @@
 import setuptools
 
 setuptools.setup(
-    name="chain",
-    version="0.1.0",
+    name="requests-chain",
+    version="0.1.1",
     url="https://github.com/ajpen/chain",
 
     author="Anfernee Jervis",
@@ -13,7 +13,7 @@ setuptools.setup(
 
     packages=setuptools.find_packages(),
 
-    install_requires=[],
+    install_requires=['requests'],
 
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
