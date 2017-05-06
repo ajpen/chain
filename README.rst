@@ -1,7 +1,7 @@
 chain
 =====
 
-.. image:: https://img.shields.io/pypi/v/chain.svg
+.. image:: https://img.shields.io/pypi/v/chain-api.svg
     :target: https://pypi.python.org/pypi/chain-api/
     :alt: Latest PyPI version
 
