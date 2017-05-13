@@ -37,13 +37,26 @@ Lets take for example `this API`_:
     # the response is the response object from the requests package
     >>> print response.json()
 
-What about queries?
+
+Numbers and special characters are also supported using dictionary notation
+
+.. code-block:: pycon
+
+    # Get the first post
+    >>> response = blogs.get.posts[1]()
+    >>> print response.json()
+
+
+chain parameters are requests.requests parameters:
 
 .. code-block:: pycon
 
     # parameters are the same as requests.requests parameters
     >>> response = blogs.get.comments(params={'postId': '1'})
     >>> print response.json()
+
+    >>> comment = {'postId': 1, 'id':501, 'name':'chain', 'email':'chain@code.com', 'body':'meh.'}
+    >>> response = blogs.post.comments(json=comment)
 
 
 Installation

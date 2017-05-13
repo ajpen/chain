@@ -14,6 +14,9 @@ class RequestBuilder(object):
         url = '{}/{}'.format(self.___url___, name)
         return RequestBuilder(url, self.___md___)
 
+    def __getitem__(self, item):
+        return self.__getattr__(item)
+
     def __call__(self, **kwargs):
         return requests.request(self.___md___, self.___url___, **kwargs)
 
