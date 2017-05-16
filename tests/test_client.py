@@ -93,3 +93,31 @@ class TestChainRequest(unittest.TestCase):
             json.dumps({"want": "Chocolate-Chip"}),
             "Request body does not match expected"
         )
+
+    @responses.activate
+    def test_numbers(self):
+        responses.add(responses.GET, 'http://sample.com/tea/cookies/1',
+                      json={"cookie": "Chocolate-Chip"}, status=200)
+
+        expected_response = {'cookie': 'Chocolate-Chip'}
+        response = self.client.get.tea.cookies[1]()
+
+        self.assertEqual(
+            response.json(),
+            expected_response,
+            "Response body does not match expected"
+        )
+
+    @responses.activate
+    def test_special_chars(self):
+        responses.add(responses.GET, 'http://sample.com/tea/cookies/$*',
+                      json={"cookie": "Chocolate-Chip"}, status=200)
+
+        expected_response = {'cookie': 'Chocolate-Chip'}
+        response = self.client.get.tea.cookies["$*"]()
+
+        self.assertEqual(
+            response.json(),
+            expected_response,
+            "Response body does not match expected"
+        )
