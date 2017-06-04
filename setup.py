@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
     name="chain-api",
-    version="0.1.5",
+    version="0.1.6",
     url="https://github.com/ajpen/chain",
 
     author="Anfernee Jervis",
