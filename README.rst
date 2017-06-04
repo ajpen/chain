@@ -86,7 +86,7 @@ Works with Python version 2.7, 3.3, 3.4, 3.5 and 3.6
 
 Licence
 -------
-MIT licensed. See full `LICENSE`_
+MIT licensed. Requests is licensed by the Apache License. See full `LICENSE`_
 
 Authors
 -------
