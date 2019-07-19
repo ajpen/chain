@@ -37,9 +37,8 @@ class Client(object):
 
     def __getattr__(self, name):
         """
-        Where the magic happens! If the attribute requested is a method name
-        (get, post, etc), start the build with that particular method, else
-        do what you always do.
+        If the attribute requested is a method name(get, post, etc), 
+        start the build with that particular method
         :param name:
         :return: RequestBuilder or raises an AttributeError
         """

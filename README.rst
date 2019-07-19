@@ -1,8 +1,8 @@
 chain
 =====
 
-.. image:: https://img.shields.io/pypi/v/chain-api.svg
-    :target: https://pypi.python.org/pypi/chain-api/
+.. image:: https://img.shields.io/pypi/v/chain-py.svg
+    :target: https://pypi.python.org/pypi/chain-py/
     :alt: Latest PyPI version
 
 .. image:: https://travis-ci.org/ajpen/chain.svg?branch=master
@@ -63,7 +63,7 @@ Installation
 ------------
 ::
 
-    pip install chain-api
+    pip install chain_py
 
 
 Testing
